@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaShoppingCart, FaUser } from "react-icons/fa";
 
 const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Products", path: "/" },
-    { name: "Contact", path: "/" },
-    { name: "About", path: "/" },
+    { name: "Shop", path: "/shop" },
+    { name: "Categories", path: "/categories" },
+    { name: "Deals", path: "/deals" },
+    { name: "Contact", path: "/contact" },
   ];
 
   const containerRef = useRef(null);
@@ -18,116 +20,83 @@ const Navbar = () => {
         setIsScrolled(containerRef.current.scrollTop > 10);
       }
     };
-
     const el = containerRef.current;
     el?.addEventListener("scroll", handleScroll);
-
     return () => el?.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <div ref={containerRef} className="h-88 md:h-64 overflow-y-scroll">
-      {/* Dummy scroll space */}
       <div className="h-[500px]" />
 
       <nav
-        className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500
         ${
           isScrolled
-            ? "bg-white/80 shadow-md backdrop-blur-lg text-gray-700 py-3 md:py-4"
-            : "bg-indigo-500 text-white py-4 md:py-6"
+            ? "bg-white/90 shadow-md backdrop-blur-lg text-gray-800"
+            : "bg-indigo-600 text-white"
         }`}
       >
-        {/* Logo */}
-        <a href="/" className="flex items-center gap-2">
-          <svg
-            className={`h-9 transition ${isScrolled ? "invert opacity-80" : ""}`}
-            viewBox="0 0 157 40"
-            fill="none"
-          >
-            {/* SVG PATH SAME AS YOUR CODE */}
-          </svg>
-        </a>
+        <div className="flex items-center justify-between px-4 md:px-16 lg:px-24 py-3">
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-4 lg:gap-8">
-          {navLinks.map((link, i) => (
-            <a
-              key={i}
-              href={link.path}
-              className={`group flex flex-col gap-0.5 ${
-                isScrolled ? "text-gray-700" : "text-white"
-              }`}
-            >
-              {link.name}
-              <span
-                className={`h-0.5 w-0 group-hover:w-full transition-all duration-300 ${
-                  isScrolled ? "bg-gray-700" : "bg-white"
-                }`}
-              />
-            </a>
-          ))}
+          {/* Logo */}
+          <h1 className="text-xl font-bold tracking-wide">
+            Shop<span className="text-yellow-400">X</span>
+          </h1>
 
-          <button
-            className={`border px-4 py-1 text-sm rounded-full transition ${
-              isScrolled ? "text-black" : "text-white"
-            }`}
-          >
-            New Launch
-          </button>
-        </div>
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-6">
+            {navLinks.map((link, i) => (
+              <a
+                key={i}
+                href={link.path}
+                className="relative font-medium hover:text-yellow-400 transition"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
 
-        {/* Desktop Right */}
-        <div className="hidden md:flex items-center gap-4">
-          <svg
-            className={`h-6 w-6 transition ${
-              isScrolled ? "invert" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
+          {/* Search Bar */}
+          <div className="hidden md:block w-64">
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="w-full px-4 py-2 rounded-full text-sm text-gray-700 focus:outline-none"
+            />
+          </div>
 
-          <button
-            className={`px-8 py-2.5 rounded-full transition ${
-              isScrolled
-                ? "bg-black text-white"
-                : "bg-white text-black"
-            }`}
-          >
-            Login
-          </button>
-        </div>
+          {/* Right Icons */}
+          <div className="hidden md:flex items-center gap-6">
+            {/* Cart */}
+            <div className="relative cursor-pointer">
+              <FaShoppingCart size={20} />
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                3
+              </span>
+            </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <svg
-            onClick={() => setIsMenuOpen(true)}
-            className={`h-6 w-6 cursor-pointer ${
-              isScrolled ? "invert" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="4" y1="12" x2="20" y2="12" />
-            <line x1="4" y1="18" x2="20" y2="18" />
-          </svg>
+            {/* Account */}
+            <FaUser size={18} className="cursor-pointer" />
+
+            <button className="bg-black text-white px-5 py-2 rounded-full text-sm">
+              Login
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button onClick={() => setIsMenuOpen(true)}>☰</button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         <div
-          className={`fixed inset-0 bg-white flex flex-col items-center justify-center gap-6 md:hidden transition-transform duration-500
+          className={`fixed inset-0 bg-white flex flex-col items-center justify-center gap-6 text-gray-800 md:hidden transition-transform duration-500
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
         >
           <button
-            className="absolute top-4 right-4"
+            className="absolute top-4 right-4 text-2xl"
             onClick={() => setIsMenuOpen(false)}
           >
             ✕
@@ -137,17 +106,20 @@ const Navbar = () => {
             <a
               key={i}
               href={link.path}
+              className="text-lg font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
               {link.name}
             </a>
           ))}
 
-          <button className="border px-4 py-1 rounded-full">
-            New Launch
-          </button>
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="border px-4 py-2 rounded-full w-64"
+          />
 
-          <button className="bg-black text-white px-8 py-2.5 rounded-full">
+          <button className="bg-black text-white px-8 py-2 rounded-full">
             Login
           </button>
         </div>
